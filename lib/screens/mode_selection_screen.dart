@@ -10,52 +10,188 @@ class ModeSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.background,
-      appBar: AppBar(
-        title: Text("Select Mode", style: AppTheme.headingStyle),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
+      body: Container(
+        decoration: const BoxDecoration(gradient: AppTheme.primaryGradient),
+        child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildModeCard(
-                context,
-                title: "OFFLINE",
-                subtitle: "Campaign Mode",
-                icon: Icons.wifi_off,
-                gradient: AppTheme.primaryGradient,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EmojiSelectionScreen(),
+              // Custom App Bar
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.2),
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                      onPressed: () => Navigator.pop(context),
                     ),
-                  );
-                },
-              ).animate().slideX(begin: -1, end: 0, duration: 500.ms),
-
-              const SizedBox(height: 30),
-
-              _buildModeCard(
-                context,
-                title: "ONLINE",
-                subtitle: "Multiplayer",
-                icon: Icons.public,
-                gradient: AppTheme.secondaryGradient,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const OnlineLoginScreen(),
+                    const Spacer(),
+                    Text(
+                      "Choose Your Mode",
+                      style: AppTheme.headingStyle.copyWith(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
                     ),
-                  );
-                },
-              ).animate().slideX(begin: 1, end: 0, duration: 500.ms),
+                    const Spacer(),
+                    const SizedBox(width: 48), // Balance for back button
+                  ],
+                ),
+              ).animate().fadeIn().slideY(begin: -0.5, end: 0),
+
+              const SizedBox(height: 20),
+
+              // Mode Cards
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Offline Mode Card
+                      _buildEnhancedModeCard(
+                            context,
+                            title: "OFFLINE MODE",
+                            subtitle: "Play against AI",
+                            description: "3 difficulty levels with smart AI",
+                            icon: Icons.gamepad_rounded,
+                            gradient: AppTheme.primaryGradient,
+                            accentColor: AppTheme.primary,
+                            features: [
+                              "🎮 Campaign Mode",
+                              "🤖 Smart AI",
+                              "⭐ Star System",
+                            ],
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const EmojiSelectionScreen(),
+                                ),
+                              );
+                            },
+                          )
+                          .animate()
+                          .fadeIn(delay: 200.ms, duration: 600.ms)
+                          .slideX(
+                            begin: -0.3,
+                            end: 0,
+                            curve: Curves.easeOutCubic,
+                          )
+                          .shimmer(delay: 1000.ms, duration: 1500.ms),
+
+                      const SizedBox(height: 25),
+
+                      // Divider with "OR"
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: 1,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.transparent,
+                                    Colors.white.withOpacity(0.3),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.2),
+                                ),
+                              ),
+                              child: Text(
+                                "OR",
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              height: 1,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.white.withOpacity(0.3),
+                                    Colors.transparent,
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ).animate().fadeIn(delay: 400.ms),
+
+                      const SizedBox(height: 25),
+
+                      // Online Mode Card
+                      _buildEnhancedModeCard(
+                            context,
+                            title: "ONLINE MODE",
+                            subtitle: "Multiplayer Battles",
+                            description: "Compete with players worldwide",
+                            icon: Icons.public_rounded,
+                            gradient: AppTheme.secondaryGradient,
+                            accentColor: AppTheme.secondary,
+                            features: [
+                              "🌍 Global Players",
+                              "🔗 QR Join",
+                              "🏆 Leaderboard",
+                            ],
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const OnlineLoginScreen(),
+                                ),
+                              );
+                            },
+                          )
+                          .animate()
+                          .fadeIn(delay: 400.ms, duration: 600.ms)
+                          .slideX(
+                            begin: 0.3,
+                            end: 0,
+                            curve: Curves.easeOutCubic,
+                          )
+                          .shimmer(delay: 1200.ms, duration: 1500.ms),
+
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -63,55 +199,158 @@ class ModeSelectionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildModeCard(
+  Widget _buildEnhancedModeCard(
     BuildContext context, {
     required String title,
     required String subtitle,
+    required String description,
     required IconData icon,
     required Gradient gradient,
+    required Color accentColor,
+    required List<String> features,
     required VoidCallback onTap,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          gradient: gradient,
-          borderRadius: BorderRadius.circular(20),
+          color: AppTheme.surface,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white.withOpacity(0.1), width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: (gradient as LinearGradient).colors.first.withOpacity(0.4),
-              blurRadius: 15,
-              offset: const Offset(0, 8),
+              color: accentColor.withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
             ),
           ],
         ),
-        child: Row(
+        child: Stack(
           children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                shape: BoxShape.circle,
+            // Gradient overlay on top
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [accentColor.withOpacity(0.1), Colors.transparent],
+                  ),
+                ),
               ),
-              child: Icon(icon, color: Colors.white, size: 32),
             ),
-            const SizedBox(width: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTheme.headingStyle.copyWith(color: Colors.white),
-                ),
-                Text(
-                  subtitle,
-                  style: AppTheme.bodyStyle.copyWith(color: Colors.white70),
-                ),
-              ],
+
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      // Icon container
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          gradient: gradient,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: accentColor.withOpacity(0.4),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Icon(icon, color: Colors.white, size: 36),
+                      ),
+
+                      const SizedBox(width: 16),
+
+                      // Title and subtitle
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: AppTheme.headingStyle.copyWith(
+                                fontSize: 22,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              subtitle,
+                              style: AppTheme.bodyStyle.copyWith(
+                                color: accentColor.withOpacity(0.8),
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Arrow
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: accentColor.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          color: accentColor,
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Description
+                  Text(
+                    description,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.6),
+                      fontSize: 13,
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Feature tags
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: features.map((feature) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: accentColor.withOpacity(0.3),
+                          ),
+                        ),
+                        child: Text(
+                          feature,
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.8),
+                            fontSize: 11,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
             ),
-            const Spacer(),
-            const Icon(Icons.arrow_forward_ios, color: Colors.white70),
           ],
         ),
       ),
