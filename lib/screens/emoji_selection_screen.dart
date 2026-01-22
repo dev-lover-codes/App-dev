@@ -20,94 +20,218 @@ class _EmojiSelectionScreenState extends State<EmojiSelectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: AppBar(
-        title: Text("Choose Avatar", style: AppTheme.headingStyle),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
-          Text(
-            "Select your fighter!",
-            style: AppTheme.bodyStyle,
-          ).animate().fadeIn(),
-          const SizedBox(height: 40),
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(20),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
-              ),
-              itemCount: emojis.length,
-              itemBuilder: (context, index) {
-                final emoji = emojis[index];
-                final isSelected = selectedEmoji == emoji;
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedEmoji = emoji;
-                    });
-                  },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? AppTheme.primary.withOpacity(0.2)
-                          : AppTheme.surface,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: isSelected
-                            ? AppTheme.primary
-                            : Colors.transparent,
-                        width: 2,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // App Bar
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: AppTheme.cardBackground,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppTheme.border),
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: AppTheme.text,
+                        size: 18,
                       ),
                     ),
-                    child: Center(
-                      child: Text(emoji, style: const TextStyle(fontSize: 48))
-                          .animate(target: isSelected ? 1 : 0)
-                          .scale(
-                            begin: const Offset(1, 1),
-                            end: const Offset(1.2, 1.2),
-                          ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    'Choose Avatar',
+                    style: AppTheme.headingStyle.copyWith(fontSize: 18),
+                  ),
+                  const Spacer(),
+                  const SizedBox(width: 44),
+                ],
+              ),
+            ).animate().fadeIn(duration: 300.ms),
+
+            const SizedBox(height: 20),
+
+            // Title
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Select Your',
+                    style: AppTheme.displayLarge.copyWith(
+                      fontSize: 36,
+                      color: AppTheme.textSecondary,
                     ),
                   ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                onPressed: () {
-                  Provider.of<GameProvider>(
-                    context,
-                    listen: false,
-                  ).setEmojis(selectedEmoji, '🤖');
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const OfflineLevelsScreen(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+                  Text(
+                    'Fighter',
+                    style: AppTheme.displayLarge.copyWith(fontSize: 36),
                   ),
+                ],
+              ),
+            ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
+
+            const SizedBox(height: 40),
+
+            // Emoji Grid
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
                 ),
-                child: Text("CONFIRM", style: AppTheme.buttonTextStyle),
+                itemCount: emojis.length,
+                itemBuilder: (context, index) {
+                  final emoji = emojis[index];
+                  final isSelected = selectedEmoji == emoji;
+                  return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedEmoji = emoji;
+                          });
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? AppTheme.cardBackground
+                                : AppTheme.surface,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: isSelected
+                                  ? AppTheme.primary
+                                  : AppTheme.border,
+                              width: isSelected ? 2 : 1,
+                            ),
+                            boxShadow: isSelected
+                                ? [
+                                    BoxShadow(
+                                      color: AppTheme.primary.withOpacity(0.3),
+                                      blurRadius: 16,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                          child: Center(
+                            child: Text(
+                              emoji,
+                              style: TextStyle(fontSize: isSelected ? 52 : 48),
+                            ),
+                          ),
+                        ),
+                      )
+                      .animate(key: ValueKey('$emoji-$isSelected'))
+                      .fadeIn(delay: (index * 50).ms);
+                },
               ),
             ),
-          ),
-        ],
+
+            // Selected preview and button
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppTheme.cardBackground,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
+                border: const Border(top: BorderSide(color: AppTheme.border)),
+              ),
+              child: Column(
+                children: [
+                  // Selected preview
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surface,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppTheme.border),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: AppTheme.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: Text(
+                              selectedEmoji,
+                              style: const TextStyle(fontSize: 36),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Selected Fighter',
+                              style: AppTheme.captionStyle,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Ready to Play',
+                              style: AppTheme.headingStyle.copyWith(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Confirm button
+                  GestureDetector(
+                    onTap: () {
+                      Provider.of<GameProvider>(
+                        context,
+                        listen: false,
+                      ).setEmojis(selectedEmoji, '🤖');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const OfflineLevelsScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        gradient: AppTheme.accentGradient,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: AppTheme.buttonShadow,
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Continue',
+                          style: AppTheme.buttonTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
