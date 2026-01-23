@@ -16,126 +16,216 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
+              // Brand Logo
               Row(
-                children: [
-                  Container(
-                    width: 4,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      gradient: AppTheme.accentGradient,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text('XO', style: AppTheme.titleStyle.copyWith(fontSize: 28)),
-                ],
-              ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.1),
+                    children: [
+                      Container(
+                        width: 4,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          gradient: AppTheme.accentGradient,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'XO',
+                            style: AppTheme.titleStyle.copyWith(
+                              fontSize: 32,
+                              height: 1,
+                            ),
+                          ),
+                          Text(
+                            'NEON',
+                            style: AppTheme.captionStyle.copyWith(
+                              fontSize: 10,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                  .animate()
+                  .fadeIn(duration: 600.ms, curve: Curves.easeOut)
+                  .slideX(begin: -0.2, curve: Curves.easeOutCubic),
 
               const Spacer(),
 
-              // Main Title
+              // Main Hero Text
               Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Ready to',
                         style: AppTheme.displayLarge.copyWith(
-                          fontSize: 48,
+                          fontSize: 52,
+                          height: 1.1,
                           color: AppTheme.textSecondary,
                         ),
                       ),
-                      Text(
-                        'Play?',
-                        style: AppTheme.displayLarge.copyWith(fontSize: 48),
+                      ShaderMask(
+                        shaderCallback: (bounds) =>
+                            AppTheme.accentGradient.createShader(
+                              Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+                            ),
+                        child: Text(
+                          'Dominate?',
+                          style: AppTheme.displayLarge.copyWith(
+                            fontSize: 52,
+                            height: 1.1,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ],
                   )
                   .animate()
-                  .fadeIn(delay: 200.ms, duration: 600.ms)
-                  .slideY(begin: 0.1),
+                  .fadeIn(delay: 300.ms, duration: 800.ms)
+                  .slideY(begin: 0.15, curve: Curves.easeOutCubic),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               // Subtitle
               Text(
-                'Choose your game mode and start\nwinning matches',
-                style: AppTheme.bodyStyle.copyWith(fontSize: 16),
-              ).animate().fadeIn(delay: 400.ms),
-
-              const SizedBox(height: 48),
-
-              // Game preview card
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: AppTheme.cardDecoration.copyWith(
-                  boxShadow: AppTheme.cardShadow,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Mini game board
-                    Container(
-                      width: 120,
-                      height: 120,
-                      child: CustomPaint(painter: MiniGameBoardPainter()),
+                    'Strategic, competitive, and addictive.\nTest your skills against AI or real players.',
+                    style: AppTheme.bodyStyle.copyWith(
+                      fontSize: 15,
+                      height: 1.5,
                     ),
-                  ],
-                ),
-              ).animate().fadeIn(delay: 600.ms).scale(delay: 600.ms),
+                  )
+                  .animate()
+                  .fadeIn(delay: 500.ms, duration: 600.ms)
+                  .slideY(begin: 0.1),
+
+              const SizedBox(height: 60),
+
+              // Feature highlights
+              Row(
+                children: [
+                  _buildFeature('AI Powered', Icons.psychology_outlined),
+                  const SizedBox(width: 24),
+                  _buildFeature('Multiplayer', Icons.public_outlined),
+                  const SizedBox(width: 24),
+                  _buildFeature('Competitive', Icons.emoji_events_outlined),
+                ],
+              ).animate().fadeIn(delay: 700.ms).slideY(begin: 0.1),
 
               const Spacer(),
 
-              // Stats row
+              // Game preview card
               Container(
-                padding: const EdgeInsets.all(20),
-                decoration: AppTheme.cardDecoration,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildStat('Games', '0'),
-                    Container(width: 1, height: 40, color: AppTheme.border),
-                    _buildStat('Wins', '0'),
-                    Container(width: 1, height: 40, color: AppTheme.border),
-                    _buildStat('Streak', '0'),
-                  ],
-                ),
-              ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.1),
+                    padding: const EdgeInsets.all(28),
+                    decoration: BoxDecoration(
+                      color: AppTheme.cardBackground,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: AppTheme.border),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 24,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 140,
+                          height: 140,
+                          child: CustomPaint(
+                            painter: EnhancedGameBoardPainter(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                  .animate()
+                  .fadeIn(delay: 900.ms, duration: 800.ms)
+                  .scale(delay: 900.ms, begin: const Offset(0.9, 0.9))
+                  .shimmer(
+                    delay: 2000.ms,
+                    duration: 2000.ms,
+                    color: AppTheme.primary.withOpacity(0.1),
+                  ),
 
-              const SizedBox(height: 24),
+              const Spacer(),
 
               // Start button
               GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ModeSelectionScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    gradient: AppTheme.accentGradient,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.primary.withOpacity(0.3),
-                        blurRadius: 16,
-                        offset: const Offset(0, 8),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  const ModeSelectionScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                                const begin = Offset(1.0, 0.0);
+                                const end = Offset.zero;
+                                const curve = Curves.easeOutCubic;
+                                var tween = Tween(
+                                  begin: begin,
+                                  end: end,
+                                ).chain(CurveTween(curve: curve));
+                                return SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
+                                );
+                              },
+                          transitionDuration: const Duration(milliseconds: 400),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        gradient: AppTheme.accentGradient,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.primary.withOpacity(0.4),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Start Playing',
-                      style: AppTheme.buttonTextStyle.copyWith(fontSize: 17),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Start Playing',
+                              style: AppTheme.buttonTextStyle.copyWith(
+                                fontSize: 18,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const Icon(
+                              Icons.arrow_forward_rounded,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
+                  )
+                  .animate()
+                  .fadeIn(delay: 1100.ms, duration: 600.ms)
+                  .slideY(begin: 0.2, curve: Curves.easeOutCubic)
+                  .shimmer(
+                    delay: 2500.ms,
+                    duration: 1500.ms,
+                    color: Colors.white.withOpacity(0.3),
                   ),
-                ),
-              ).animate().fadeIn(delay: 1000.ms).slideY(begin: 0.2),
 
               const SizedBox(height: 16),
             ],
@@ -145,52 +235,70 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStat(String label, String value) {
-    return Column(
+  Widget _buildFeature(String label, IconData icon) {
+    return Row(
       children: [
-        Text(value, style: AppTheme.headingStyle.copyWith(fontSize: 24)),
-        const SizedBox(height: 4),
-        Text(label, style: AppTheme.captionStyle),
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: AppTheme.surface,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppTheme.border),
+          ),
+          child: Icon(icon, color: AppTheme.primary, size: 16),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: AppTheme.captionStyle.copyWith(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ],
     );
   }
 }
 
-class MiniGameBoardPainter extends CustomPainter {
+class EnhancedGameBoardPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = AppTheme.border
-      ..strokeWidth = 2
+      ..strokeWidth = 2.5
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
     final cellSize = size.width / 3;
 
-    // Draw grid
+    // Draw grid with rounded corners
     for (int i = 1; i < 3; i++) {
       // Vertical lines
       canvas.drawLine(
-        Offset(cellSize * i, 0),
-        Offset(cellSize * i, size.height),
+        Offset(cellSize * i, 10),
+        Offset(cellSize * i, size.height - 10),
         paint,
       );
       // Horizontal lines
       canvas.drawLine(
-        Offset(0, cellSize * i),
-        Offset(size.width, cellSize * i),
+        Offset(10, cellSize * i),
+        Offset(size.width - 10, cellSize * i),
         paint,
       );
     }
 
-    // Draw X (cyan)
+    // Draw X (cyan with gradient effect)
     final xPaint = Paint()
-      ..color = AppTheme.primary
-      ..strokeWidth = 3
+      ..shader = const LinearGradient(
+        colors: [Color(0xFF00D9FF), Color(0xFF0099FF)],
+      ).createShader(Rect.fromLTWH(0, 0, cellSize, cellSize))
+      ..strokeWidth = 4
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    final padding = cellSize * 0.3;
+    final padding = cellSize * 0.28;
+    // X in top-left
     canvas.drawLine(
       Offset(padding, padding),
       Offset(cellSize - padding, cellSize - padding),
@@ -202,19 +310,21 @@ class MiniGameBoardPainter extends CustomPainter {
       xPaint,
     );
 
-    // Draw O (pink)
+    // Draw O (pink/red with gradient effect)
     final oPaint = Paint()
-      ..color = AppTheme.secondary
-      ..strokeWidth = 3
+      ..shader = const LinearGradient(
+        colors: [Color(0xFFFF4B6E), Color(0xFFFF1744)],
+      ).createShader(Rect.fromLTWH(cellSize, cellSize, cellSize, cellSize))
+      ..strokeWidth = 4
       ..style = PaintingStyle.stroke;
 
     canvas.drawCircle(
       Offset(cellSize * 1.5, cellSize * 1.5),
-      cellSize * 0.2,
+      cellSize * 0.22,
       oPaint,
     );
 
-    // Draw X in bottom right
+    // X in bottom-right
     canvas.drawLine(
       Offset(cellSize * 2 + padding, cellSize * 2 + padding),
       Offset(cellSize * 3 - padding, cellSize * 3 - padding),

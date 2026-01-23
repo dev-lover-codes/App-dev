@@ -54,7 +54,9 @@ class GameScreen extends StatelessWidget {
                               ? "Draw!"
                               : (game.isPlayerTurn
                                     ? "Your Turn"
-                                    : "AI's Turn")),
+                                    : (game.gameMode == 'local2p'
+                                          ? "Player 2's Turn"
+                                          : "AI's Turn"))),
                     style: AppTheme.bodyStyle.copyWith(
                       color: game.winner.isNotEmpty
                           ? Colors.greenAccent
@@ -135,6 +137,8 @@ class GameScreen extends StatelessWidget {
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primary,
+                                    foregroundColor:
+                                        Colors.black, // Better contrast on Cyan
                                   ),
                                   icon: const Icon(Icons.arrow_forward),
                                   label: const Text("Next Stage"),
@@ -161,7 +165,8 @@ class GameScreen extends StatelessWidget {
     final value = game.board[index];
     return GestureDetector(
       onTap: () {
-        if (game.isPlayerTurn && value.isEmpty) {
+        if ((game.isPlayerTurn || game.gameMode == 'local2p') &&
+            value.isEmpty) {
           game.makeMove(index);
         }
       },

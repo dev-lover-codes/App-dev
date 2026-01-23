@@ -4,8 +4,15 @@ import '../utils/app_theme.dart';
 import 'emoji_selection_screen.dart';
 import 'online_login_screen.dart';
 
-class ModeSelectionScreen extends StatelessWidget {
+class ModeSelectionScreen extends StatefulWidget {
   const ModeSelectionScreen({super.key});
+
+  @override
+  State<ModeSelectionScreen> createState() => _ModeSelectionScreenState();
+}
+
+class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
+  int? hoveredIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +20,7 @@ class ModeSelectionScreen extends StatelessWidget {
       backgroundColor: AppTheme.background,
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // App Bar
             Padding(
@@ -47,22 +55,49 @@ class ModeSelectionScreen extends StatelessWidget {
               ),
             ).animate().fadeIn(duration: 300.ms),
 
+            const SizedBox(height: 20),
+
+            // Title
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Choose Your',
+                    style: AppTheme.displayLarge.copyWith(
+                      fontSize: 36,
+                      color: AppTheme.textSecondary,
+                    ),
+                  ),
+                  Text(
+                    'Battle Mode',
+                    style: AppTheme.displayLarge.copyWith(fontSize: 36),
+                  ),
+                ],
+              ),
+            ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
+
+            const SizedBox(height: 40),
+
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: ListView(
                   children: [
                     // Offline Mode Card
                     _buildModeCard(
                       context,
+                      index: 0,
                       title: 'Offline',
                       subtitle: 'Campaign Mode',
-                      icon: Icons.person,
-                      price: 'Free',
-                      description: 'Play against AI',
-                      color: AppTheme.primary,
-                      isActive: false,
+                      description: 'Play against AI with 3 difficulty levels',
+                      icon: Icons.psychology_outlined,
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF00D9FF), Color(0xFF0099FF)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -71,20 +106,23 @@ class ModeSelectionScreen extends StatelessWidget {
                           ),
                         );
                       },
-                    ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
+                    ).animate().fadeIn(delay: 300.ms).slideX(begin: -0.2),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
 
                     // Online Mode Card
                     _buildModeCard(
                       context,
+                      index: 1,
                       title: 'Online',
                       subtitle: 'Multiplayer',
-                      icon: Icons.public,
-                      price: 'Free',
-                      description: 'Play with friends',
-                      color: AppTheme.secondary,
-                      isActive: false,
+                      description: 'Challenge players from around the world',
+                      icon: Icons.public_outlined,
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFFF4B6E), Color(0xFFFF1744)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -93,33 +131,33 @@ class ModeSelectionScreen extends StatelessWidget {
                           ),
                         );
                       },
-                    ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1),
+                    ).animate().fadeIn(delay: 400.ms).slideX(begin: -0.2),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
 
-                    // Practice Mode Card
+                    // Local 2 Player Mode Card
                     _buildModeCard(
                       context,
-                      title: 'Practice',
-                      subtitle: 'Local 2 Player',
-                      icon: Icons.people,
-                      price: 'Free',
-                      description: 'Play offline with friend',
-                      color: AppTheme.accent,
-                      isActive: false,
+                      index: 2,
+                      title: 'Local 2P',
+                      subtitle: 'Pass & Play',
+                      description: 'Play with a friend on the same device',
+                      icon: Icons.people_outline,
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF7C3AED), Color(0xFF5B21B6)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text('Coming soon!'),
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: AppTheme.cardBackground,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const EmojiSelectionScreen(isLocal2P: true),
                           ),
                         );
                       },
-                    ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1),
+                    ).animate().fadeIn(delay: 500.ms).slideX(begin: -0.2),
                   ],
                 ),
               ),
@@ -132,101 +170,121 @@ class ModeSelectionScreen extends StatelessWidget {
 
   Widget _buildModeCard(
     BuildContext context, {
+    required int index,
     required String title,
     required String subtitle,
-    required IconData icon,
-    required String price,
     required String description,
-    required Color color,
-    required bool isActive,
+    required IconData icon,
+    required Gradient gradient,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: AppTheme.cardDecoration.copyWith(
-          boxShadow: AppTheme.cardShadow,
-        ),
-        child: Row(
-          children: [
-            // Icon
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: color, size: 24),
+    final isHovered = hoveredIndex == index;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => hoveredIndex = index),
+      onExit: (_) => setState(() => hoveredIndex = null),
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          transform: Matrix4.identity()..scale(isHovered ? 1.02 : 1.0),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: AppTheme.cardDecoration.copyWith(
+              boxShadow: isHovered
+                  ? [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 30,
+                        offset: const Offset(0, 10),
+                      ),
+                    ]
+                  : AppTheme.cardShadow,
             ),
-
-            const SizedBox(width: 16),
-
-            // Title and subtitle
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTheme.headingStyle.copyWith(fontSize: 18),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: AppTheme.captionStyle.copyWith(fontSize: 13),
-                  ),
-                ],
-              ),
-            ),
-
-            // Price
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+            child: Row(
               children: [
-                Text(
-                  price,
-                  style: AppTheme.headingStyle.copyWith(fontSize: 16),
+                // Icon with gradient background
+                Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        gradient: gradient,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: (gradient as LinearGradient).colors.first
+                                .withOpacity(0.4),
+                            blurRadius: 16,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Icon(icon, color: Colors.white, size: 30),
+                    )
+                    .animate()
+                    .fadeIn(delay: (300 + index * 100).ms)
+                    .scale(delay: (300 + index * 100).ms),
+
+                const SizedBox(width: 20),
+
+                // Title, subtitle and description
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTheme.headingStyle.copyWith(
+                          fontSize: 22,
+                          color: AppTheme.text,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: AppTheme.captionStyle.copyWith(
+                          fontSize: 13,
+                          color: (gradient as LinearGradient).colors.first,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        description,
+                        style: AppTheme.captionStyle.copyWith(
+                          fontSize: 12,
+                          color: AppTheme.textSecondary.withOpacity(0.7),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  description,
-                  style: AppTheme.captionStyle.copyWith(fontSize: 11),
+
+                const SizedBox(width: 12),
+
+                // Arrow with subtle animation
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  transform: Matrix4.identity()
+                    ..translate(isHovered ? 4.0 : 0.0, 0.0),
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: AppTheme.surface,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppTheme.border),
+                    ),
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      color: (gradient as LinearGradient).colors.first,
+                      size: 16,
+                    ),
+                  ),
                 ),
               ],
             ),
-
-            const SizedBox(width: 12),
-
-            // Toggle or arrow
-            Container(
-              width: 44,
-              height: 28,
-              decoration: BoxDecoration(
-                color: isActive ? AppTheme.success : AppTheme.surface,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                  color: isActive ? AppTheme.success : AppTheme.border,
-                ),
-              ),
-              child: AnimatedAlign(
-                alignment: isActive
-                    ? Alignment.centerRight
-                    : Alignment.centerLeft,
-                duration: const Duration(milliseconds: 200),
-                child: Container(
-                  margin: const EdgeInsets.all(2),
-                  width: 24,
-                  height: 24,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

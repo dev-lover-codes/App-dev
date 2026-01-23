@@ -21,6 +21,9 @@ class GameProvider extends ChangeNotifier {
   int currentLevelId = 1;
   int currentStageId = 1;
 
+  // Game Mode: 'ai' or 'local2p'
+  String gameMode = 'ai';
+
   GameProvider() {
     _initializeLevels();
   }
@@ -138,6 +141,11 @@ class GameProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setGameMode(String mode) {
+    gameMode = mode;
+    notifyListeners();
+  }
+
   void startGame(int levelId, int stageId) {
     currentLevelId = levelId;
     currentStageId = stageId;
@@ -156,6 +164,26 @@ class GameProvider extends ChangeNotifier {
   Future<void> makeMove(int index) async {
     if (board[index] != '' || winner != '') return;
 
+    // In local 2P mode, alternate between player emojis
+    if (gameMode == 'local2p') {
+      board[index] = isPlayerTurn ? playerEmoji : opponentEmoji;
+      moveCount++;
+
+      String currentPlayerEmoji = isPlayerTurn ? playerEmoji : opponentEmoji;
+
+      if (_checkWin(currentPlayerEmoji)) {
+        winner = currentPlayerEmoji;
+      } else if (!board.contains('')) {
+        isDraw = true;
+      } else {
+        // Switch turn
+        isPlayerTurn = !isPlayerTurn;
+      }
+      notifyListeners();
+      return;
+    }
+
+    // AI mode (original logic)
     board[index] = playerEmoji;
     moveCount++;
     if (_checkWin(playerEmoji)) {

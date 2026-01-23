@@ -4,9 +4,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../utils/app_theme.dart';
 import '../providers/game_provider.dart';
 import 'offline_levels_screen.dart';
+import 'game_screen.dart';
 
 class EmojiSelectionScreen extends StatefulWidget {
-  const EmojiSelectionScreen({super.key});
+  final bool isLocal2P;
+
+  const EmojiSelectionScreen({super.key, this.isLocal2P = false});
 
   @override
   State<EmojiSelectionScreen> createState() => _EmojiSelectionScreenState();
@@ -15,6 +18,8 @@ class EmojiSelectionScreen extends StatefulWidget {
 class _EmojiSelectionScreenState extends State<EmojiSelectionScreen> {
   final List<String> emojis = ['😎', '🚀', '🔥', '⭐', '⚡', '🐱', '💀', '👽'];
   String selectedEmoji = '😎';
+  String player2Emoji = '🤖';
+  bool selectingPlayer2 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +71,9 @@ class _EmojiSelectionScreenState extends State<EmojiSelectionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Select Your',
+                    widget.isLocal2P
+                        ? (selectingPlayer2 ? 'Player 2' : 'Player 1')
+                        : 'Select Your',
                     style: AppTheme.displayLarge.copyWith(
                       fontSize: 36,
                       color: AppTheme.textSecondary,
@@ -200,16 +207,39 @@ class _EmojiSelectionScreenState extends State<EmojiSelectionScreen> {
                   // Confirm button
                   GestureDetector(
                     onTap: () {
-                      Provider.of<GameProvider>(
+                      final provider = Provider.of<GameProvider>(
                         context,
                         listen: false,
-                      ).setEmojis(selectedEmoji, '🤖');
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const OfflineLevelsScreen(),
-                        ),
                       );
+
+                      if (widget.isLocal2P && !selectingPlayer2) {
+                        // First selection for player 1, now select player 2
+                        setState(() {
+                          player2Emoji = selectedEmoji == '😎' ? '🚀' : '😎';
+                          selectingPlayer2 = true;
+                        });
+                      } else if (widget.isLocal2P && selectingPlayer2) {
+                        // Second selection done, start game
+                        provider.setEmojis(selectedEmoji, player2Emoji);
+                        provider.setGameMode('local2p');
+                        provider.resetGame();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const GameScreen(),
+                          ),
+                        );
+                      } else {
+                        // Normal AI mode
+                        provider.setEmojis(selectedEmoji, '🤖');
+                        provider.setGameMode('ai');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const OfflineLevelsScreen(),
+                          ),
+                        );
+                      }
                     },
                     child: Container(
                       width: double.infinity,
@@ -221,7 +251,11 @@ class _EmojiSelectionScreenState extends State<EmojiSelectionScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          'Continue',
+                          widget.isLocal2P
+                              ? (selectingPlayer2
+                                    ? 'Start Game'
+                                    : 'Select Player 2')
+                              : 'Continue',
                           style: AppTheme.buttonTextStyle,
                         ),
                       ),
