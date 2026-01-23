@@ -24,17 +24,26 @@ class OfflineLevelsScreen extends StatelessWidget {
           if (game.levels.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
-          return ListView.builder(
-            padding: const EdgeInsets.all(20),
-            itemCount: game.levels.length,
-            itemBuilder: (context, index) {
-              final level = game.levels[index];
-              return _buildLevelCard(context, level, index).animate().slideY(
-                begin: 0.2,
-                end: 0,
-                delay: Duration(milliseconds: index * 100),
-              );
-            },
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 900),
+              child: ListView.builder(
+                padding: const EdgeInsets.all(20),
+                itemCount: game.levels.length,
+                itemBuilder: (context, index) {
+                  final level = game.levels[index];
+                  return _buildLevelCard(
+                    context,
+                    level,
+                    index,
+                  ).animate().slideY(
+                    begin: 0.2,
+                    end: 0,
+                    delay: Duration(milliseconds: index * 100),
+                  );
+                },
+              ),
+            ),
           );
         },
       ),

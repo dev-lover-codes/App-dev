@@ -25,20 +25,32 @@ class StagesScreen extends StatelessWidget {
           if (stages == null)
             return const Center(child: Text("Error loading stages"));
 
-          return GridView.builder(
-            padding: const EdgeInsets.all(20),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
-            ),
-            itemCount: stages.length,
-            itemBuilder: (context, index) {
-              final stage = stages[index];
-              return _buildStageCard(
-                context,
-                stage,
-              ).animate().scale(delay: Duration(milliseconds: index * 50));
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final isWide = constraints.maxWidth > 900;
+              final crossAxisCount = isWide ? 6 : 3;
+              final maxWidth = isWide ? 1000.0 : 600.0;
+
+              return Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: maxWidth),
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(20),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 15,
+                      mainAxisSpacing: 15,
+                    ),
+                    itemCount: stages.length,
+                    itemBuilder: (context, index) {
+                      final stage = stages[index];
+                      return _buildStageCard(context, stage).animate().scale(
+                        delay: Duration(milliseconds: index * 50),
+                      );
+                    },
+                  ),
+                ),
+              );
             },
           );
         },

@@ -273,8 +273,17 @@ class GameProvider extends ChangeNotifier {
       stars,
     );
 
+    // Update current stage stars in memory immediately
+    if (levelStages.containsKey(currentLevelId)) {
+      List<Stage> stages = levelStages[currentLevelId]!;
+      int currentIndex = stages.indexWhere((s) => s.id == currentStageId);
+      if (currentIndex != -1) {
+        stages[currentIndex] = stages[currentIndex].copyWith(stars: stars);
+      }
+    }
+
     // Unlock next stage
-    _unlockNextStage(prefs);
+    await _unlockNextStage(prefs);
     notifyListeners();
   }
 
