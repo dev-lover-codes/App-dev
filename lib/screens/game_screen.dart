@@ -78,7 +78,7 @@ class GameScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withValues(alpha: 0.5),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -187,12 +187,13 @@ class GameScreen extends StatelessWidget {
 
   Widget _buildWinStars(int moves) {
     int stars = 0;
-    if (moves <= 3)
+    if (moves <= 3) {
       stars = 3;
-    else if (moves == 4)
+    } else if (moves == 4) {
       stars = 2;
-    else if (moves == 5)
+    } else if (moves == 5) {
       stars = 1;
+    }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

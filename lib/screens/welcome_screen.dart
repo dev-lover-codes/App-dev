@@ -125,7 +125,7 @@ class WelcomeScreen extends StatelessWidget {
                       border: Border.all(color: AppTheme.border),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha: 0.2),
                           blurRadius: 24,
                           offset: const Offset(0, 8),
                         ),
@@ -150,7 +150,7 @@ class WelcomeScreen extends StatelessWidget {
                   .shimmer(
                     delay: 2000.ms,
                     duration: 2000.ms,
-                    color: AppTheme.primary.withOpacity(0.1),
+                    color: AppTheme.primary.withValues(alpha: 0.1),
                   ),
 
               const Spacer(),
@@ -190,7 +190,7 @@ class WelcomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.primary.withOpacity(0.4),
+                            color: AppTheme.primary.withValues(alpha: 0.4),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -224,7 +224,7 @@ class WelcomeScreen extends StatelessWidget {
                   .shimmer(
                     delay: 2500.ms,
                     duration: 1500.ms,
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.white.withValues(alpha: 0.3),
                   ),
 
               const SizedBox(height: 16),

@@ -22,8 +22,9 @@ class StagesScreen extends StatelessWidget {
       body: Consumer<GameProvider>(
         builder: (context, game, child) {
           final stages = game.levelStages[levelId];
-          if (stages == null)
+          if (stages == null) {
             return const Center(child: Text("Error loading stages"));
+          }
 
           return LayoutBuilder(
             builder: (context, constraints) {
@@ -79,17 +80,17 @@ class StagesScreen extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: isLocked
-              ? AppTheme.surface.withOpacity(0.5)
+              ? AppTheme.surface.withValues(alpha: 0.5)
               : AppTheme.surface,
           borderRadius: BorderRadius.circular(15),
           border: isLocked
               ? Border.all(color: Colors.white12)
-              : Border.all(color: AppTheme.secondary.withOpacity(0.5)),
+              : Border.all(color: AppTheme.secondary.withValues(alpha: 0.5)),
           boxShadow: isLocked
               ? []
               : [
                   BoxShadow(
-                    color: AppTheme.secondary.withOpacity(0.1),
+                    color: AppTheme.secondary.withValues(alpha: 0.1),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),

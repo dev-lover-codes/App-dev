@@ -69,7 +69,7 @@ class OfflineLevelsScreen extends StatelessWidget {
         height: 120,
         decoration: BoxDecoration(
           color: isLocked
-              ? AppTheme.surface.withOpacity(0.5)
+              ? AppTheme.surface.withValues(alpha: 0.5)
               : AppTheme.surface,
           borderRadius: BorderRadius.circular(20),
           border: isLocked
@@ -79,7 +79,7 @@ class OfflineLevelsScreen extends StatelessWidget {
               ? []
               : [
                   BoxShadow(
-                    color: AppTheme.primary.withOpacity(0.2),
+                    color: AppTheme.primary.withValues(alpha: 0.2),
                     blurRadius: 10,
                     offset: const Offset(0, 5),
                   ),
@@ -93,7 +93,7 @@ class OfflineLevelsScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isLocked
                     ? Colors.white10
-                    : AppTheme.primary.withOpacity(0.1),
+                    : AppTheme.primary.withValues(alpha: 0.1),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(20),
                   bottomLeft: Radius.circular(20),

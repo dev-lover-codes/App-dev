@@ -257,14 +257,15 @@ class GameProvider extends ChangeNotifier {
   Future<void> _handleWin() async {
     // Calculate stars
     int stars = 0;
-    if (moveCount <= 3)
+    if (moveCount <= 3) {
       stars = 3;
-    else if (moveCount == 4)
+    } else if (moveCount == 4) {
       stars = 2;
-    else if (moveCount == 5)
+    } else if (moveCount == 5) {
       stars = 1;
-    else
+    } else {
       stars = 0;
+    }
 
     // Save stars for current stage
     final prefs = await SharedPreferences.getInstance();

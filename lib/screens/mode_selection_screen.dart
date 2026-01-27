@@ -293,14 +293,18 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOutCubic,
-          transform: Matrix4.identity()..scale(isHovered ? 1.02 : 1.0),
+          transform: Matrix4.diagonal3Values(
+            isHovered ? 1.02 : 1.0,
+            isHovered ? 1.02 : 1.0,
+            isHovered ? 1.02 : 1.0,
+          ),
           child: Container(
             padding: const EdgeInsets.all(24),
             decoration: AppTheme.cardDecoration.copyWith(
               boxShadow: isHovered
                   ? [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                         blurRadius: 30,
                         offset: const Offset(0, 10),
                       ),
@@ -317,7 +321,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: gradient.colors.first.withOpacity(0.4),
+                            color: gradient.colors.first.withValues(alpha: 0.4),
                             blurRadius: 16,
                             offset: const Offset(0, 8),
                           ),
@@ -353,7 +357,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                         description,
                         style: AppTheme.captionStyle.copyWith(
                           fontSize: 12,
-                          color: AppTheme.textSecondary.withOpacity(0.7),
+                          color: AppTheme.textSecondary.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -362,8 +366,11 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                 const SizedBox(width: 12),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  transform: Matrix4.identity()
-                    ..translate(isHovered ? 4.0 : 0.0, 0.0),
+                  transform: Matrix4.translationValues(
+                    isHovered ? 4.0 : 0.0,
+                    0.0,
+                    0.0,
+                  ),
                   child: Container(
                     width: 40,
                     height: 40,
@@ -409,12 +416,16 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
           width: 300,
           height: 400,
           curve: Curves.easeOutCubic,
-          transform: Matrix4.identity()..scale(isHovered ? 1.05 : 1.0),
+          transform: Matrix4.diagonal3Values(
+            isHovered ? 1.05 : 1.0,
+            isHovered ? 1.05 : 1.0,
+            isHovered ? 1.05 : 1.0,
+          ),
           decoration: AppTheme.cardDecoration.copyWith(
             boxShadow: isHovered
                 ? [
                     BoxShadow(
-                      color: gradient.colors.first.withOpacity(0.4),
+                      color: gradient.colors.first.withValues(alpha: 0.4),
                       blurRadius: 40,
                       offset: const Offset(0, 15),
                     ),
@@ -435,7 +446,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: gradient.colors.first.withOpacity(0.4),
+                      color: gradient.colors.first.withValues(alpha: 0.4),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -468,7 +479,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                   textAlign: TextAlign.center,
                   style: AppTheme.captionStyle.copyWith(
                     fontSize: 14,
-                    color: AppTheme.textSecondary.withOpacity(0.8),
+                    color: AppTheme.textSecondary.withValues(alpha: 0.8),
                     height: 1.5,
                   ),
                 ),

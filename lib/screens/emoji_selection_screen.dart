@@ -128,8 +128,8 @@ class _EmojiSelectionScreenState extends State<EmojiSelectionScreen> {
                                 boxShadow: isSelected
                                     ? [
                                         BoxShadow(
-                                          color: AppTheme.primary.withOpacity(
-                                            0.3,
+                                          color: AppTheme.primary.withValues(
+                                            alpha: 0.3,
                                           ),
                                           blurRadius: 16,
                                           offset: const Offset(0, 4),
@@ -181,7 +181,7 @@ class _EmojiSelectionScreenState extends State<EmojiSelectionScreen> {
                               width: 60,
                               height: 60,
                               decoration: BoxDecoration(
-                                color: AppTheme.primary.withOpacity(0.1),
+                                color: AppTheme.primary.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Center(

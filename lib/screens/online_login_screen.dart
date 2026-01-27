@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../utils/app_theme.dart';
 import '../services/supabase_service.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -31,9 +31,11 @@ class _OnlineLoginScreenState extends State<OnlineLoginScreen> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      }
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -46,13 +48,17 @@ class _OnlineLoginScreenState extends State<OnlineLoginScreen> {
         _emailController.text,
         _passwordController.text,
       );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Sign up successful! Please log in.")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Sign up successful! Please log in.")),
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      }
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -87,11 +93,11 @@ class _OnlineLoginScreenState extends State<OnlineLoginScreen> {
                       width: 300,
                       height: 300,
                       decoration: BoxDecoration(
-                        color: AppTheme.secondary.withOpacity(0.5),
+                        color: AppTheme.secondary.withValues(alpha: 0.5),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.secondary.withOpacity(0.5),
+                            color: AppTheme.secondary.withValues(alpha: 0.5),
                             blurRadius: 100,
                             spreadRadius: 20,
                           ),
@@ -113,11 +119,11 @@ class _OnlineLoginScreenState extends State<OnlineLoginScreen> {
                       width: 250,
                       height: 250,
                       decoration: BoxDecoration(
-                        color: AppTheme.accent.withOpacity(0.5),
+                        color: AppTheme.accent.withValues(alpha: 0.5),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.accent.withOpacity(0.5),
+                            color: AppTheme.accent.withValues(alpha: 0.5),
                             blurRadius: 100,
                             spreadRadius: 20,
                           ),
@@ -137,12 +143,14 @@ class _OnlineLoginScreenState extends State<OnlineLoginScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(32),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: Colors.white.withOpacity(0.2)),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.2),
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -173,7 +181,7 @@ class _OnlineLoginScreenState extends State<OnlineLoginScreen> {
                         controller: _emailController,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.black.withOpacity(0.3),
+                          fillColor: Colors.black.withValues(alpha: 0.3),
                           prefixIcon: const Icon(
                             Icons.email,
                             color: AppTheme.primary,
@@ -201,7 +209,7 @@ class _OnlineLoginScreenState extends State<OnlineLoginScreen> {
                         controller: _passwordController,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.black.withOpacity(0.3),
+                          fillColor: Colors.black.withValues(alpha: 0.3),
                           prefixIcon: const Icon(
                             Icons.lock,
                             color: AppTheme.secondary,
@@ -242,8 +250,8 @@ class _OnlineLoginScreenState extends State<OnlineLoginScreen> {
                                 onPressed: _signIn,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppTheme.primary,
-                                  shadowColor: AppTheme.primary.withOpacity(
-                                    0.5,
+                                  shadowColor: AppTheme.primary.withValues(
+                                    alpha: 0.5,
                                   ),
                                   elevation: 5,
                                   shape: RoundedRectangleBorder(
